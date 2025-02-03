@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.autofill.CharSequenceTransformation;
@@ -34,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Button button = findViewById(R.id.button);
-            button.setOnClickListener(v -> sendNotification());
+            button.setOnClickListener(v -> Notificationhelper.setNotification(this, "Nowe", "ВСЕ ПЛОХА"));
             Button button1 = findViewById(R.id.button1);
-            button1.setOnClickListener(v -> sendNotificationlong());}
+            button1.setOnClickListener(v -> sendNotificationlong());
+            Button ButtonPicture = findViewById(R.id.PictureButton);
+            ButtonPicture.setOnClickListener(v->{sendNotificationPicture();});}
 
     }
     private void createnotif(){
@@ -48,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
             chanel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(chanel);
-
         }
     }
+
     private void sendNotification() {
         Intent intent =new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -79,6 +83,35 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(1, builder.build());
 
     }
+    private void sendNotificationPicture(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.dice);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if(checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED){
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS},1);
+                return;
+            }
 
 
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,0, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(this, CHANELL_ID)
+                            .setSmallIcon(R.drawable.dice2)
+                            .setContentTitle("Powiadomienie Obraz 3TPE")
+                            .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap))
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setContentIntent(pendingIntent)
+                            .setAutoCancel(true);
+            NotificationManagerCompat notificationManager =
+                    NotificationManagerCompat.from(this);
+            notificationManager.notify(1,builder.build());
+        }
+    }
 }
+
+
+
