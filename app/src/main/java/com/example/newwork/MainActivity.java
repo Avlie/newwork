@@ -22,6 +22,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
     private static final String CHANELL_ID = "my_channel_id";
+    private static final int NOTIFICATION_ID = 1;
+    private static int ID = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +38,12 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Button button = findViewById(R.id.button);
-            button.setOnClickListener(v -> Notificationhelper.setNotification(this, "Nowe", "ВСЕ ПЛОХА"));
+            button.setOnClickListener(v -> Notificationhelper.setNotification(ID,this, "Nowe", "ВСЕ ПЛОХА", 1);
+            ID++;
+            ));
             Button button1 = findViewById(R.id.button1);
-            button1.setOnClickListener(v -> sendNotificationlong());
+            button1.setOnClickListener(v -> Notificationhelper.setNotification(ID,this, "Nowe", "ВСЕ ПЛОХА", 1);
+            ID++;));
             Button ButtonPicture = findViewById(R.id.PictureButton);
             ButtonPicture.setOnClickListener(v->{sendNotificationPicture();});}
 
