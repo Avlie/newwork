@@ -21,7 +21,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String CHANELL_ID = "my_channel_id";
+    private static final String CHANNEL_ID = "my_channel_id";
     private static final int NOTIFICATION_ID = 1;
     private static int ID = 0;
     @Override
@@ -29,23 +29,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
-        createnotif();
-        createnotiflong();
+        Notificationhelper.createNotificationChannel(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
                 requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 1);
             }
 
             Button button = findViewById(R.id.button);
-            button.setOnClickListener(v -> Notificationhelper.setNotification(ID,this, "Nowe", "ВСЕ ПЛОХА", 1);
-            ID++;
-            ));
+            button.setOnClickListener(v -> { Notificationhelper.setNotification(ID, Notificationhelper.CHANNEL_ID_LOW, this, "Nowe", "ВСЕ ПЛОХА", 1);
+                ID++;});
             Button button1 = findViewById(R.id.button1);
-            button1.setOnClickListener(v -> Notificationhelper.setNotification(ID,this, "Nowe", "ВСЕ ПЛОХА", 1);
-            ID++;));
+            button1.setOnClickListener(v -> { Notificationhelper.setNotification(ID, Notificationhelper.CHANNEL_ID_DEFAULT,this, "Nowe", "ВСЕ ПЛОХА МИР ВЗАРВЕТСА", 2);
+                    ID++;});
             Button ButtonPicture = findViewById(R.id.PictureButton);
-            ButtonPicture.setOnClickListener(v->{sendNotificationPicture();});}
+            ButtonPicture.setOnClickListener(v->{ Notificationhelper.setNotification(ID, Notificationhelper.CHANNEL_ID_HIGH,this, "Nowe", "ВСЕ ПЛОХА МИР ВЗАРВЕТСА", 3);
+                ID++;});
+            Button Addline = findViewById(R.id.Addline);
+            Addline.setOnClickListener(v->{ Notificationhelper.setNotification(ID,Notificationhelper.CHANNEL_ID_HIGH,this, "Nowe", "ВСЕ ПЛОХА МИР ВЗАРВЕТСА", 3);
+                ID++;});
+        }
 
     }
     private void createnotif(){
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             CharSequence name = "Kanal powiadomien";
             String description = "Opis Kanalu powiadonienia";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel chanel = new NotificationChannel(CHANELL_ID, name, importance);
+            NotificationChannel chanel = new NotificationChannel(CHANNEL_ID, name, importance);
             chanel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(chanel);
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendNotification() {
         Intent intent =new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANELL_ID).setSmallIcon(R.drawable.g).setContentTitle("nowe").setContentText("ВСЕ ПЛОХА, МИР ВЗАРВЕТСА").setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(pendingIntent).setAutoCancel(true);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID).setSmallIcon(R.drawable.g).setContentTitle("nowe").setContentText("ВСЕ ПЛОХА, МИР ВЗАРВЕТСА").setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(pendingIntent).setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(1, builder.build());
 
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             CharSequence name = "Kanal powiadomien";
             String description = "Opis Kanalu powiadonienia";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel chanel = new NotificationChannel(CHANELL_ID, name, importance);
+            NotificationChannel chanel = new NotificationChannel(CHANNEL_ID, name, importance);
             chanel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(chanel);
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private void sendNotificationlong() {
         Intent intent =new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANELL_ID).setSmallIcon(R.drawable.g).setContentTitle("nowe").setContentText("ВСЕ ПЛОХА, МИР ВЗАРВЕТСА").setStyle(new NotificationCompat.BigTextStyle().bigText("Lorem2")).setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(pendingIntent).setAutoCancel(true);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID).setSmallIcon(R.drawable.g).setContentTitle("nowe").setContentText("ВСЕ ПЛОХА, МИР ВЗАРВЕТСА").setStyle(new NotificationCompat.BigTextStyle().bigText("Lorem2")).setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(pendingIntent).setAutoCancel(true);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(1, builder.build());
 
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             NotificationCompat.Builder builder =
-                    new NotificationCompat.Builder(this, CHANELL_ID)
+                    new NotificationCompat.Builder(this, CHANNEL_ID)
                             .setSmallIcon(R.drawable.dice2)
                             .setContentTitle("Powiadomienie Obraz 3TPE")
                             .setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap))
